@@ -19,7 +19,7 @@ env = environ.Env(
     DEBUG=(bool, False)
 )
 
-environ.Env.read_env(env.path.join(BASE_DIR, '.env'))
+environ.Env.read_env(env.path(BASE_DIR, '.env'))
 
 SECRET_KEY = env('SECRET_KEY')
 
