@@ -1,0 +1,29 @@
+services:
+  auth-service:
+    container_name: auth-service
+    build:
+      context: .
+    ports:
+      - 8002:8000
+    volumes:
+      - ./auth-service:/auth-service
+    env_file:
+      - ./auth-service/.env
+    depends_on:
+      psql:
+        condition: service_healthy
+
+  psql:
+    container_name: psql
+    image: postgres:17-alpine3.21
+    ports:
+      - 5432:5432
+    volumes:
+      - ./data/postgres/data:/var/lib/postgresql/data
+    env_file:
+      - ./auth-service/.env
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h 127.0.0.1 -p 5432"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
