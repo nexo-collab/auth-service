@@ -1,0 +1,37 @@
+# Byte-compiled / cache files
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.pyc
+
+# Environments
+.env
+venv/
+env/
+*.env
+
+# Django / DRF specific
+*.sqlite3
+media/
+staticfiles/
+static/
+node_modules/
+
+# Docker / IDE / OS
+*.log
+*.swp
+*.swo
+*.DS_Store
+*.idea/
+.vscode/
+
+# Test / coverage
+.coverage
+htmlcov/
+.tox/
+nosetests.xml
+pytest_cache/
+.pytest_cache/
+
+data/*
