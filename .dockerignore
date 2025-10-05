@@ -19,8 +19,6 @@ static/
 node_modules/
 
 # Docker / IDE / OS
-Dockerfile
-docker-compose.yml
 *.log
 *.swp
 *.swo
