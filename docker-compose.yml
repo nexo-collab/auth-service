@@ -8,7 +8,7 @@ services:
     volumes:
       - ./auth-service:/auth-service
     env_file:
-      - ./auth-service/.env
+      - ./auth-service/.env.docker
     depends_on:
       psql:
         condition: service_healthy
@@ -17,11 +17,11 @@ services:
     container_name: psql
     image: postgres:17-alpine3.21
     ports:
-      - 5432:5432
+      - 5433:5432
     volumes:
       - ./data/postgres/data:/var/lib/postgresql/data
     env_file:
-      - ./auth-service/.env
+      - ./auth-service/.env.docker
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h 127.0.0.1 -p 5432"]
       interval: 2s

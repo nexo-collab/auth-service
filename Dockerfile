@@ -5,12 +5,14 @@ ENV PYTHONUNBUFFERED 1
 
 WORKDIR /auth-service
 
-COPY auth-service /auth-service
-COPY scripts/entrypoint.sh /scripts/entrypoint.sh
-
-RUN apt-get update && apt-get install -y netcat-traditional postgresql-client && \
+COPY auth-service/requirements.txt /auth-service/requirements.txt
+RUN apt-get update && \
+    apt-get install -y netcat-traditional postgresql-client && \
     pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && \
-    chmod +x /scripts/entrypoint.sh
+    pip install --no-cache-dir -r requirements.txt
 
-ENTRYPOINT ["/scripts/entrypoint.sh"]
+COPY auth-service /auth-service
+
+RUN chmod +x /auth-service/entrypoint.sh
+
+ENTRYPOINT ["/auth-service/entrypoint.sh"]

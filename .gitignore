@@ -167,6 +167,9 @@ cython_debug/
 # Arquivos de volume do Docker
 data/*
 
+# Variaveis de ambiente Docker
+.env.docker
+
 # PyCharm
 #  JetBrains specific template is maintained in a separate JetBrains.gitignore that can
 #  be found at https://github.com/github/gitignore/blob/main/Global/JetBrains.gitignore
