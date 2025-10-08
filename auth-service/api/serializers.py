@@ -31,6 +31,7 @@ class RegisterSerializer(serializers.ModelSerializer):
         """
         Cria e retorna um novo usuário após a validação.
         """
+        validated_data.pop('password2', None)
         user = User.objects.create_user(
             email=validated_data['email'],
             password=validated_data['password'],
