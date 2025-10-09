@@ -23,8 +23,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         """
         Validação customizada para garantir que as senhas coincidem.
         """
-        if attrs['password'] != attrs['password2']:
-            raise serializers.ValidationError({"password": "As senhas não coincidem."})
+        self._validate_password(attrs)
+        self._validate_admin(attrs)
         return attrs
 
     def create(self, validated_data):
@@ -39,12 +39,13 @@ class RegisterSerializer(serializers.ModelSerializer):
         )
         return user
 
-class UserSerializer(serializers.ModelSerializer):
-    """
-    Serializer para exibir os dados de um usuário.
-    Apenas para leitura (serialização).
-    """
-    class Meta:
-        model = User
-        fields = ('user_id', 'email', 'role', 'is_active', 'is_staff')
-        read_only_fields = fields
+    def _validate_password(self, attrs):
+        if attrs['password'] != attrs['password2']:
+            raise serializers.ValidationError({"password": "As senhas não coincidem."})
+        return attrs
+    
+    def _validate_admin(self, attrs):
+        if attrs.get('is_staff') or attrs.get('role') == 'admin':
+            if User.objects.filter(role='admin').exists():
+                raise serializers.ValidationError({"role": "Só pode existir um único admin no sistema"})
+        return attrs
