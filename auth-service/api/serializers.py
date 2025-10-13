@@ -58,9 +58,6 @@ class LoginSerializer(serializers.Serializer):
         email = attrs.get('email')
         password = attrs.get('password')
 
-        if not all([email, password]):
-            raise serializers.ValidationError("Email e senha são obrigatórios.")
-
         user = User.objects.filter(email=email).first()
         if not user:
             raise serializers.ValidationError("Usuário não encontrado.")
