@@ -10,6 +10,10 @@ class UserListAPIView(generics.ListAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+class UserRetriveAPIView(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializer
+
 class RegisterView(generics.CreateAPIView):
     queryset = User.objects.all()
     serializer_class = RegisterSerializer
