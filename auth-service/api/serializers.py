@@ -6,7 +6,7 @@ from core.models import User
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = '__all__'
+        fields = ('id', 'email', 'role')  # Explicitly list safe fields
 
 class RegisterSerializer(serializers.ModelSerializer):
     email = serializers.EmailField(
