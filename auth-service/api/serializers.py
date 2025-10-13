@@ -59,11 +59,7 @@ class LoginSerializer(serializers.Serializer):
         password = attrs.get('password')
 
         user = User.objects.filter(email=email).first()
-        if not user:
-            raise serializers.ValidationError("Usuário não encontrado.")
-
-        if not user.check_password(password):
-            raise serializers.ValidationError("Senha inválida.")
-
+        if not user or not user.check_password(password):
+            raise serializers.ValidationError("Credenciais inválidas.")
         attrs['user'] = user
         return attrs
