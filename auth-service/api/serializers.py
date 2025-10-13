@@ -53,15 +53,13 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField(write_only=True)
-    role = serializers.CharField()
 
     def validate(self, attrs):
         email = attrs.get('email')
         password = attrs.get('password')
-        role = attrs.get('role')
 
-        if not all([email, password, role]):
-            raise serializers.ValidationError("Email, senha e role são obrigatórios.")
+        if not all([email, password]):
+            raise serializers.ValidationError("Email e senha são obrigatórios.")
 
         user = User.objects.filter(email=email).first()
         if not user:
@@ -69,9 +67,6 @@ class LoginSerializer(serializers.Serializer):
 
         if not user.check_password(password):
             raise serializers.ValidationError("Senha inválida.")
-
-        if user.role != role:
-            raise serializers.ValidationError("Role inválido.")
 
         attrs['user'] = user
         return attrs
