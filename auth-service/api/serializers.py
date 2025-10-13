@@ -49,3 +49,17 @@ class RegisterSerializer(serializers.ModelSerializer):
             if User.objects.filter(role='admin').exists():
                 raise serializers.ValidationError({"role": "Só pode existir um único admin no sistema"})
         return attrs
+
+class LoginSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, attrs):
+        email = attrs.get('email')
+        password = attrs.get('password')
+
+        user = User.objects.filter(email=email).first()
+        if not user or not user.check_password(password):
+            raise serializers.ValidationError("Credenciais inválidas.")
+        attrs['user'] = user
+        return attrs
