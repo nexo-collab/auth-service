@@ -1,0 +1,48 @@
+services:
+  auth-service:
+    container_name: auth-service
+    build:
+      context: .
+    ports:
+      - 8002:8000
+    volumes:
+      - ./auth-service:/auth-service
+    env_file:
+      - ./auth-service/.env.docker
+    depends_on:
+      psql:
+        condition: service_healthy
+
+  psql:
+    container_name: psql
+    image: postgres:17-alpine3.21
+    ports:
+      - 5433:5432
+    volumes:
+      - ./data/postgres/data:/var/lib/postgresql/data
+    env_file:
+      - ./auth-service/.env.docker
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB -h 127.0.0.1 -p 5432"]
+      interval: 2s
+      timeout: 3s
+      retries: 20
+
+  sonarqube:
+    container_name: sonarqube
+    image: sonarqube:community
+    ports:
+      - "9000:9000"            
+    environment:
+      - SONAR_ES_BOOTSTRAP_CHECKS_DISABLE=true
+    volumes:
+      - sonarqube_data:/opt/sonarqube/data
+      - sonarqube_extensions:/opt/sonarqube/extensions
+      - sonarqube_logs:/opt/sonarqube/logs
+    depends_on:
+      - psql
+
+volumes:
+  sonarqube_data:
+  sonarqube_extensions:
+  sonarqube_logs:
